@@ -39,13 +39,16 @@ async def lifespan(app: FastAPI):
     device = service.detect_device()
     logger.info(f"Device: {device}")
 
-    # Pre-load the inference engine so first request is fast
-    logger.info("Pre-loading inference engine...")
-    engine = service._get_engine()
-    logger.info("Engine ready")
-
     _app_state["service"] = service
     _app_state["config"] = config
+
+    # Pre-load the inference engine so first request is fast
+    try:
+        logger.info("Pre-loading inference engine...")
+        engine = service._get_engine()
+        logger.info("Engine ready")
+    except Exception as e:
+        logger.warning(f"Engine pre-load failed (inference endpoints will error until resolved): {e}")
 
     yield
 
