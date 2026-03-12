@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="panel">
+    <!-- Connection Status -->
+    <div id="connection-status" class="status-bar">
+      <span id="status-dot" class="dot disconnected"></span>
+      <span id="status-text">Disconnected</span>
+      <input id="server-port" type="number" value="8741" min="1024" max="65535" />
+      <button id="btn-connect" class="btn-sm">Connect</button>
+    </div>
+
+    <!-- Preview Area -->
+    <div id="preview-area">
+      <img id="preview-image" alt="Preview" />
+      <p id="preview-placeholder">Key the active layer to see a preview</p>
+    </div>
+
+    <!-- Parameters -->
+    <div class="param-section">
+      <h3>Parameters</h3>
+
+      <div class="param-row">
+        <label for="despill-strength">Despill Strength</label>
+        <input id="despill-strength" type="range" min="0" max="1" step="0.05" value="1.0" />
+        <span id="despill-value" class="value">1.00</span>
+      </div>
+
+      <div class="param-row">
+        <label>
+          <input id="auto-despeckle" type="checkbox" checked />
+          Auto Despeckle
+        </label>
+      </div>
+
+      <div class="param-row" id="despeckle-size-row">
+        <label for="despeckle-size">Despeckle Size</label>
+        <input id="despeckle-size" type="range" min="0" max="2000" step="50" value="400" />
+        <span id="despeckle-value" class="value">400</span>
+      </div>
+
+      <div class="param-row">
+        <label for="refiner-scale">Refiner Scale</label>
+        <input id="refiner-scale" type="range" min="0" max="3" step="0.1" value="1.0" />
+        <span id="refiner-value" class="value">1.0</span>
+      </div>
+
+      <div class="param-row">
+        <label>
+          <input id="input-is-linear" type="checkbox" />
+          Input is Linear (EXR)
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="action-section">
+      <button id="btn-key" class="btn-primary" disabled>Key Active Layer</button>
+      <button id="btn-preview" class="btn-secondary" disabled>Preview Only</button>
+    </div>
+
+    <!-- Output Options -->
+    <div class="output-section">
+      <h3>Output</h3>
+      <select id="output-mode">
+        <option value="layer-mask">Create Layer Mask</option>
+        <option value="new-layer">Create New Layer (Despilled FG)</option>
+        <option value="alpha-channel">Add Alpha Channel</option>
+        <option value="all">All of the Above</option>
+      </select>
+    </div>
+
+    <!-- Processing Status -->
+    <div id="processing-status" class="status-bar hidden">
+      <span class="spinner"></span>
+      <span id="processing-text">Processing...</span>
+    </div>
+  </div>
+
+  <script src="plugin.js"></script>
+</body>
+</html>

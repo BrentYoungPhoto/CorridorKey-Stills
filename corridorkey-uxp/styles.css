@@ -1,0 +1,213 @@
+/* CorridorKey UXP Panel — matches Photoshop Spectrum design language */
+
+:root {
+  --sp-font-size: 11px;
+  --sp-bg: #323232;
+  --sp-bg-dark: #282828;
+  --sp-text: #e0e0e0;
+  --sp-text-dim: #999;
+  --sp-accent: #2680eb;
+  --sp-border: #484848;
+  --sp-success: #2dca73;
+  --sp-warning: #e68619;
+  --sp-error: #e34850;
+  --sp-radius: 4px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Adobe Clean", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: var(--sp-font-size);
+  background: var(--sp-bg);
+  color: var(--sp-text);
+}
+
+#panel {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Status bar */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot.connected { background: var(--sp-success); }
+.dot.disconnected { background: var(--sp-error); }
+.dot.connecting { background: var(--sp-warning); }
+
+#server-port {
+  width: 60px;
+  margin-left: auto;
+  padding: 2px 4px;
+  background: var(--sp-bg-dark);
+  border: 1px solid var(--sp-border);
+  color: var(--sp-text);
+  border-radius: var(--sp-radius);
+  font-size: 10px;
+}
+
+/* Preview */
+#preview-area {
+  background: var(--sp-bg-dark);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+#preview-image {
+  max-width: 100%;
+  max-height: 200px;
+  display: none;
+}
+
+#preview-placeholder {
+  color: var(--sp-text-dim);
+  font-size: 10px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Parameters */
+.param-section h3,
+.output-section h3 {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--sp-text-dim);
+  margin-bottom: 6px;
+}
+
+.param-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.param-row label {
+  font-size: var(--sp-font-size);
+  min-width: 90px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.param-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--sp-accent);
+  height: 4px;
+}
+
+.param-row input[type="checkbox"] {
+  accent-color: var(--sp-accent);
+}
+
+.value {
+  min-width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--sp-text-dim);
+  font-size: 10px;
+}
+
+/* Buttons */
+.btn-sm {
+  padding: 2px 8px;
+  background: var(--sp-bg-dark);
+  border: 1px solid var(--sp-border);
+  color: var(--sp-text);
+  border-radius: var(--sp-radius);
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 8px;
+  background: var(--sp-accent);
+  color: white;
+  border: none;
+  border-radius: var(--sp-radius);
+  cursor: pointer;
+  font-size: var(--sp-font-size);
+  font-weight: 600;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 6px;
+  background: var(--sp-bg-dark);
+  color: var(--sp-text);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  cursor: pointer;
+  font-size: var(--sp-font-size);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Output */
+.output-section select {
+  width: 100%;
+  padding: 4px;
+  background: var(--sp-bg-dark);
+  border: 1px solid var(--sp-border);
+  color: var(--sp-text);
+  border-radius: var(--sp-radius);
+  font-size: var(--sp-font-size);
+}
+
+/* Spinner */
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--sp-border);
+  border-top-color: var(--sp-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.hidden {
+  display: none !important;
+}
