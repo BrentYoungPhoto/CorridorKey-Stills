@@ -13,14 +13,9 @@ Why integration-test run_inference?
 
 from __future__ import annotations
 
-import os
 from unittest.mock import MagicMock, patch
 
 import numpy as np
-
-# OpenCV requires this env var to read/write EXR files on Windows.
-# Set it early so cv2 picks it up at import time.
-os.environ.setdefault("OPENCV_IO_ENABLE_OPENEXR", "1")
 
 # ---------------------------------------------------------------------------
 # Helpers

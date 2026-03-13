@@ -1,8 +1,13 @@
 """Shared pytest configuration and fixtures for CorridorKey tests."""
 
+import os
 import platform
 import sys
 from unittest.mock import MagicMock
+
+# OpenCV requires this env var to read/write EXR files on Windows.
+# Must be set before cv2 is imported anywhere (including fixtures below).
+os.environ.setdefault("OPENCV_IO_ENABLE_OPENEXR", "1")
 
 import numpy as np
 import pytest
