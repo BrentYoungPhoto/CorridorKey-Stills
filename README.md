@@ -260,15 +260,87 @@ For developers looking for more details on the specifics of what is happening in
 
 You can also explore the full, auto-generated codebase documentation on [DeepWiki](https://deepwiki.com/nikopueringer/CorridorKey).
 
-### Running Tests
+### Local Testing
 
-The project includes unit tests for the color math and compositing pipeline. No GPU or model weights required — tests run in a few seconds on any machine.
+#### Quick Start — Unit Tests (no GPU, no model weights)
 
 ```bash
-uv sync --group dev   # install test dependencies (pytest)
-uv run pytest          # run all tests
-uv run pytest -v       # verbose output (shows each test name)
+uv sync --group dev          # install test dependencies (pytest, ruff)
+uv run pytest                # run all tests (~10 seconds)
+uv run pytest -v             # verbose (shows each test name)
+uv run pytest -m "not gpu"   # explicitly skip GPU tests
+uv run pytest --cov          # run with coverage report
 ```
+
+The unit tests cover color math, compositing, CLI logic, device detection, and backend services. They use mock models and tiny 4×4 test images, so they run on any machine in a few seconds.
+
+#### Linting (run before submitting PRs)
+
+```bash
+uv run ruff check            # lint errors
+uv run ruff format --check   # formatting check (no changes)
+uv run ruff format           # auto-format
+```
+
+#### Running the FastAPI Server Locally
+
+The HTTP server is what the Electron app and Photoshop UXP plugin connect to.
+
+```bash
+# Start the server (auto-detects GPU, falls back to CPU)
+uv run corridorkey-server
+
+# Force CPU mode (useful on laptops with no GPU)
+CORRIDORKEY_DEVICE=cpu uv run corridorkey-server
+
+# Custom port
+CORRIDORKEY_PORT=9000 uv run corridorkey-server
+```
+
+The server starts on `http://127.0.0.1:8741` by default. You can verify it's running:
+
+```bash
+curl http://127.0.0.1:8741/api/v1/health
+```
+
+This returns device info, model status, and VRAM stats (if applicable). You need the CorridorKey model checkpoint downloaded for inference endpoints to work — see [Installation](#1-installation).
+
+#### Testing the Electron App
+
+```bash
+cd electron-app
+npm install                  # first time only
+npm run dev                  # starts Vite + Electron in dev mode
+```
+
+This requires the FastAPI server to be running separately (`uv run corridorkey-server` in another terminal). The Electron app connects to `localhost:8741`.
+
+#### Testing the Photoshop UXP Plugin
+
+1. Start the FastAPI server (`uv run corridorkey-server`)
+2. Open Photoshop (v25.0.0+)
+3. Load the plugin via **Plugins → Development → Load Plugin…** and select `corridorkey-uxp/manifest.json`
+
+The plugin connects to the same `localhost:8741` backend.
+
+#### End-to-End Test with the CLI (requires model weights)
+
+```bash
+# Process a single image through the full pipeline
+uv run python clip_manager.py --action wizard --win_path /path/to/your/clips
+
+# Force CPU if you don't have a GPU
+uv run python clip_manager.py --action wizard --win_path /path/to/your/clips --device cpu
+```
+
+#### Testing on CPU / Low-End Hardware
+
+If you're on a laptop without a dedicated GPU, everything still works — just slower. Tips:
+
+- Set `CORRIDORKEY_DEVICE=cpu` to skip failed GPU detection attempts
+- Use the `/api/v1/preview` endpoint (1024px) instead of `/api/v1/key` (full res) for faster iteration
+- Unit tests (`uv run pytest`) require no GPU at all and run identically everywhere
+- Apple Silicon Macs (M1/M2/M3/M4) get MPS acceleration automatically — no config needed
 
 ## CorridorKey Licensing and Permissions
 
